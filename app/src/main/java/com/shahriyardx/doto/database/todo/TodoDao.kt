@@ -9,7 +9,7 @@ import androidx.room.Update
 @Dao
 interface TodoDao {
     @Insert
-    suspend fun insert(todo: TodoEntity)
+    suspend fun insert(todo: TodoEntity): Long
 
     @Update
     suspend fun update(todo: TodoEntity)

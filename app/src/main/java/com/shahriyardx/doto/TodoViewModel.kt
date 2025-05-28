@@ -1,5 +1,6 @@
 package com.shahriyardx.doto
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shahriyardx.doto.database.todo.TodoDao
@@ -51,16 +52,20 @@ class TodoViewModel(
 
     fun addTodo(): Unit {
         viewModelScope.launch {
-            dao.insert(TodoEntity(state.value.title, state.value.description))
+            val todo = TodoEntity(state.value.title, state.value.description)
+            val id = dao.insert(todo)
+            val todoWithId = todo.copy(id=id.toInt())
+
+            _state.update { currentState ->
+                currentState.copy(
+                    todos = currentState.todos + todoWithId,
+                    title = "",
+                    description = "",
+                )
+            }
         }
 
-        _state.update { currentState ->
-            currentState.copy(
-                todos = currentState.todos + TodoEntity(state.value.title, state.value.description),
-                title = "",
-                description = "",
-            )
-        }
+
     }
 
     fun toggleCompletion(todo: TodoEntity) {
