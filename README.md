@@ -10,8 +10,6 @@ DoTo is a modern Android application designed to help users manage their tasks e
 *   Persistent storage of tasks using Room database.
 *   Modern, reactive UI built with Jetpack Compose.
 
-*(Add any other specific features your app has)*
-
 ## Tech Stack & Architecture
 
 *   **UI:** Jetpack Compose (Declarative UI toolkit)
@@ -21,7 +19,6 @@ DoTo is a modern Android application designed to help users manage their tasks e
     *   **Model:** Room Entities (`TodoEntity`).
 *   **Data Persistence:** Room Persistence Library (`androidx.room`) - Local SQLite database.
 *   **Asynchronous Programming:** Kotlin Coroutines & Flow - For managing background tasks and reactive data streams.
-*   **Dependency Injection (Potentially):** (e.g., Hilt, Koin, or manual) - *Specify if you are using one.*
 *   **Build System:** Gradle with Kotlin DSL (`build.gradle.kts`)
 *   **Annotation Processing:** KSP (Kotlin Symbol Processing) - Used by Room for code generation.
 *   **Language:** Kotlin
