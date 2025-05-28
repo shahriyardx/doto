@@ -8,4 +8,6 @@ sealed class TodoAction {
     data class Completed(val todo: TodoEntity): TodoAction()
     data class SetTitle(val title: String): TodoAction()
     data class SetDescription(val description: String): TodoAction()
+    data class Filter(val filterType: TodoFilter): TodoAction()
+
 }

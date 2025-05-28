@@ -58,6 +58,7 @@ class MainActivity : ComponentActivity() {
                                 .verticalScroll(rememberScrollState())
                         ) {
                             TodoForm()
+                            TodoFilterButtons()
                             TodoList(modifier = Modifier)
                         }
                     }
