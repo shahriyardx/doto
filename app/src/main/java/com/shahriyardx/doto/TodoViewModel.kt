@@ -34,7 +34,7 @@ class TodoViewModel(
             todos = todos,
             filterType = todoFilter,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TodoState())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TodoState())
 
     fun onEvent(event: TodoAction) {
         when (event) {
