@@ -17,25 +17,23 @@ fun TodoFilterButtons() {
     val viewModel = LocalViewModelComposition.current
     val state = viewModel.state.collectAsState()
 
-    Row {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TodoFilter.entries.forEach { filterType ->
-                Row(
-                    modifier = Modifier.clickable {
-                        viewModel.onEvent(TodoAction.Filter(filterType))
-                    },
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    RadioButton(selected = state.value.filterType == filterType,
-                        onClick = { viewModel.onEvent(TodoAction.Filter(filterType)) })
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        TodoFilter.entries.forEach { filterType ->
+            Row(
+                modifier = Modifier.clickable {
+                    viewModel.onEvent(TodoAction.Filter(filterType))
+                },
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                RadioButton(selected = state.value.filterType == filterType,
+                    onClick = { viewModel.onEvent(TodoAction.Filter(filterType)) })
 
-                    Text(filterType.name)
-                }
+                Text(filterType.name)
             }
         }
     }
