@@ -31,4 +31,3 @@ DoTo is a modern Android application designed to help users manage their tasks e
     *   It holds the UI state (e.g., list of todos, current filter type) typically in a `StateFlow` or `MutableStateFlow`.
     *   Exposes events/actions (e.g., `onEvent(TodoAction.Filter(filterType))`) that UI components can trigger.
     *   Interacts with the Repository to fetch or modify data.
-*   **Collecting State in Composables**:
