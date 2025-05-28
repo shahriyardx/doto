@@ -14,6 +14,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -23,7 +24,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun TodoList(modifier: Modifier) {
     val viewModel = LocalViewModelComposition.current
-    val state = viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
 
     Column(modifier = modifier) {
         Text(
@@ -39,7 +40,7 @@ fun TodoList(modifier: Modifier) {
                 .padding(top = 5.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            state.value.todos.forEach { todo ->
+            state.todos.forEach { todo ->
                 Row(modifier = Modifier
                     .background(Color.LightGray)
                     .padding(10.dp)) {

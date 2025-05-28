@@ -10,6 +10,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,14 +21,14 @@ import androidx.compose.ui.unit.sp
 fun TodoForm(
 ) {
     val viewModel = LocalViewModelComposition.current
-    val state = viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
 
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(text = "Add new todo", fontSize = 25.sp, fontWeight = FontWeight.Bold)
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = state.value.title,
+            value = state.title,
             placeholder = { Text("Enter Title") },
             maxLines = 1,
             onValueChange = {
@@ -40,7 +41,7 @@ fun TodoForm(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp),
-            value = state.value.description,
+            value = state.description,
             placeholder = { Text("Enter Description") },
             onValueChange = {
                 viewModel.onEvent(TodoAction.SetDescription(it))
