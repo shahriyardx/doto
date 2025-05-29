@@ -1,4 +1,4 @@
-package com.shahriyardx.doto
+package com.shahriyardx.doto.screens.todo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.shahriyardx.doto.viewmodels.todo.LocalViewModelComposition
+import com.shahriyardx.doto.viewmodels.todo.TodoAction
 
 @Composable
 fun TodoList(modifier: Modifier) {

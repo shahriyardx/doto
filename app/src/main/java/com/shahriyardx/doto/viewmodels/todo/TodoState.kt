@@ -1,5 +1,6 @@
-package com.shahriyardx.doto
+package com.shahriyardx.doto.viewmodels.todo
 
+import com.shahriyardx.doto.viewmodels.todo.TodoFilter
 import com.shahriyardx.doto.database.todo.TodoEntity
 
 data class TodoState(

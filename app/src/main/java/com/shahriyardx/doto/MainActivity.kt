@@ -22,7 +22,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.shahriyardx.doto.database.Database
+import com.shahriyardx.doto.screens.todo.TodoFilterButtons
+import com.shahriyardx.doto.screens.todo.TodoForm
+import com.shahriyardx.doto.screens.todo.TodoList
 import com.shahriyardx.doto.ui.theme.DoToTheme
+import com.shahriyardx.doto.viewmodels.todo.LocalViewModelComposition
+import com.shahriyardx.doto.viewmodels.todo.TodoViewModel
 
 class MainActivity : ComponentActivity() {
     private val db by lazy {

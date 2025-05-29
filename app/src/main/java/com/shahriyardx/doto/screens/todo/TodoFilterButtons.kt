@@ -1,4 +1,4 @@
-package com.shahriyardx.doto
+package com.shahriyardx.doto.screens.todo
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -11,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.shahriyardx.doto.viewmodels.todo.LocalViewModelComposition
+import com.shahriyardx.doto.viewmodels.todo.TodoAction
+import com.shahriyardx.doto.viewmodels.todo.TodoFilter
 
 @Composable
 fun TodoFilterButtons() {

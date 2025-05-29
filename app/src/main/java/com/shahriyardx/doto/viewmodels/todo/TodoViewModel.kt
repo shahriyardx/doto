@@ -1,7 +1,10 @@
-package com.shahriyardx.doto
+package com.shahriyardx.doto.viewmodels.todo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shahriyardx.doto.viewmodels.todo.TodoAction
+import com.shahriyardx.doto.viewmodels.todo.TodoFilter
+import com.shahriyardx.doto.viewmodels.todo.TodoState
 import com.shahriyardx.doto.database.todo.TodoDao
 import com.shahriyardx.doto.database.todo.TodoEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -12,7 +15,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TodoViewModel(
@@ -25,7 +27,7 @@ class TodoViewModel(
             TodoFilter.COMPLETED -> dao.getCompletedTodos()
             TodoFilter.INCOMPLETE -> dao.getIncompleteTodos()
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(), emptyList())
 
     private val _state = MutableStateFlow(TodoState())
 
@@ -34,7 +36,7 @@ class TodoViewModel(
             todos = todos,
             filterType = todoFilter,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TodoState())
+    }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(), TodoState())
 
     fun onEvent(event: TodoAction) {
         when (event) {
