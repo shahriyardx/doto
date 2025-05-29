@@ -18,8 +18,9 @@ class TodoViewModel(
     private val repository: TodoRepository,
 ) : ViewModel() {
     private val _todoFilter = MutableStateFlow<TodoFilter>(TodoFilter.ALL)
-    private val _todos = _todoFilter.flatMapLatest { filterType ->
-        repository.getTodos(filterType)
+
+    private val _todos = _todoFilter.flatMapLatest {
+        repository.getTodos(it)
     }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(), emptyList())
 
     private val _state = MutableStateFlow(TodoState())
@@ -33,7 +34,7 @@ class TodoViewModel(
 
     fun onEvent(event: TodoAction) {
         when (event) {
-            is TodoAction.Add -> addTodo()
+            TodoAction.Add -> addTodo()
             is TodoAction.Delete -> deleteTodo(event.todo)
             is TodoAction.Completed -> toggleCompletion(event.todo)
             is TodoAction.SetTitle -> setTitle(event.title)
