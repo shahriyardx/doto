@@ -1,12 +1,11 @@
 package com.shahriyardx.doto.repositories
 
 import com.shahriyardx.doto.database.Database
-import com.shahriyardx.doto.database.todo.TodoDao
 import com.shahriyardx.doto.database.todo.TodoEntity
 import com.shahriyardx.doto.viewmodels.todo.TodoFilter
 import kotlinx.coroutines.flow.Flow
 
-class TodoRepositoryImpl(private val database: Database): TodoRepository {
+class TodoRepositoryImpl(override val database: Database): TodoRepository {
     private val dao = database.dao
 
     override fun getTodos(filter: TodoFilter): Flow<List<TodoEntity>> {

@@ -23,17 +23,21 @@ import com.shahriyardx.doto.screens.todo.TodoList
 import com.shahriyardx.doto.ui.theme.DoToTheme
 import com.shahriyardx.doto.viewmodels.todo.LocalViewModelComposition
 import com.shahriyardx.doto.viewmodels.todo.TodoViewModel
-import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : ComponentActivity() {
+    private val viewModel by viewModel<TodoViewModel>()
+
+    // Other ways
+    // private val viewModel = getViewModel<TodoViewModel>() // Also Possible
+    // private val database by inject<Database>() // Only initialize database once we use database
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             DoToTheme {
-                val viewModel = getViewModel<TodoViewModel>()
-
                 CompositionLocalProvider(LocalViewModelComposition provides viewModel) {
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                         Column(
