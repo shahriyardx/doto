@@ -2,11 +2,8 @@ package com.shahriyardx.doto.viewmodels.todo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shahriyardx.doto.viewmodels.todo.TodoAction
-import com.shahriyardx.doto.viewmodels.todo.TodoFilter
-import com.shahriyardx.doto.viewmodels.todo.TodoState
-import com.shahriyardx.doto.database.todo.TodoDao
 import com.shahriyardx.doto.database.todo.TodoEntity
+import com.shahriyardx.doto.repositories.TodoRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,15 +15,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TodoViewModel(
-    private val dao: TodoDao
+    private val repository: TodoRepository,
 ) : ViewModel() {
     private val _todoFilter = MutableStateFlow<TodoFilter>(TodoFilter.ALL)
     private val _todos = _todoFilter.flatMapLatest { filterType ->
-        when (filterType) {
-            TodoFilter.ALL -> dao.getAllTodos()
-            TodoFilter.COMPLETED -> dao.getCompletedTodos()
-            TodoFilter.INCOMPLETE -> dao.getIncompleteTodos()
-        }
+        repository.getTodos(filterType)
     }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(), emptyList())
 
     private val _state = MutableStateFlow(TodoState())
@@ -73,7 +66,7 @@ class TodoViewModel(
     fun addTodo() {
         viewModelScope.launch {
             val todo = TodoEntity(state.value.title, state.value.description)
-            val id = dao.insert(todo)
+            val id = repository.addTodo(todo)
             val todoWithId = todo.copy(id = id.toInt())
 
             _state.update { currentState ->
@@ -90,7 +83,7 @@ class TodoViewModel(
 
     fun toggleCompletion(todo: TodoEntity) {
         viewModelScope.launch {
-            dao.update(todo.copy(isComplete = !todo.isComplete))
+            repository.updateTodo(todo.copy(isComplete = !todo.isComplete))
         }
 
         _state.update { it ->
@@ -104,7 +97,7 @@ class TodoViewModel(
 
     fun deleteTodo(todo: TodoEntity) {
         viewModelScope.launch {
-            dao.delete(todo)
+            repository.deleteTodo(todo)
         }
 
         _state.update { it ->

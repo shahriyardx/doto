@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,41 +17,23 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
-import com.shahriyardx.doto.database.Database
 import com.shahriyardx.doto.screens.todo.TodoFilterButtons
 import com.shahriyardx.doto.screens.todo.TodoForm
 import com.shahriyardx.doto.screens.todo.TodoList
 import com.shahriyardx.doto.ui.theme.DoToTheme
 import com.shahriyardx.doto.viewmodels.todo.LocalViewModelComposition
 import com.shahriyardx.doto.viewmodels.todo.TodoViewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+
 
 class MainActivity : ComponentActivity() {
-    private val db by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            Database::class.java,
-            "database.db",
-        ).build()
-    }
-
-    private val viewModel by viewModels<TodoViewModel>(
-        factoryProducer = {
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return TodoViewModel(dao = db.dao) as T
-                }
-            }
-        }
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             DoToTheme {
+                val viewModel = getViewModel<TodoViewModel>()
+
                 CompositionLocalProvider(LocalViewModelComposition provides viewModel) {
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                         Column(
