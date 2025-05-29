@@ -24,37 +24,34 @@ val LocalNavController = staticCompositionLocalOf<NavHostController> {
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+    val enterTransition = slideInHorizontally(
+        initialOffsetX = { fullWidth -> -fullWidth }, animationSpec = tween(300)
+    ) + fadeIn(animationSpec = tween(300))
+
+
+    val exitTransition = slideOutHorizontally(
+        animationSpec = tween(300)
+    ) + fadeOut(animationSpec = tween(300))
 
     CompositionLocalProvider(LocalNavController provides navController) {
         NavHost(navController = navController, startDestination = Screen.Todos.route) {
-            composable(
-                route = Screen.Todos.route,
-                enterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { fullWidth -> - fullWidth },
-                        animationSpec = tween(300)
-                    ) + fadeIn(animationSpec = tween(300))
-                },
-                exitTransition = {
-                    slideOutHorizontally(
-                        animationSpec = tween(300)
-                    ) + fadeOut(animationSpec = tween(300))
-                }
-            ) {
+            composable(route = Screen.Todos.route, enterTransition = {
+                enterTransition
+            }, exitTransition = {
+                exitTransition
+            }) {
                 TodoListPage()
             }
 
-            composable(route = Screen.AddTodo.route,enterTransition = {
+            composable(route = Screen.AddTodo.route, enterTransition = {
                 slideInHorizontally(
-                    initialOffsetX = { fullWidth -> - fullWidth },
-                    animationSpec = tween(300)
+                    initialOffsetX = { fullWidth -> -fullWidth }, animationSpec = tween(300)
                 ) + fadeIn(animationSpec = tween(300))
-            },
-                exitTransition = {
-                    slideOutHorizontally(
-                        animationSpec = tween(300)
-                    ) + fadeOut(animationSpec = tween(300))
-                }) {
+            }, exitTransition = {
+                slideOutHorizontally(
+                    animationSpec = tween(300)
+                ) + fadeOut(animationSpec = tween(300))
+            }) {
                 AddTodoPage()
             }
         }
