@@ -39,19 +39,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             DoToTheme {
                 CompositionLocalProvider(LocalViewModelComposition provides viewModel) {
-                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(innerPadding)
-                                .padding(horizontal = 16.dp)
-                                .verticalScroll(rememberScrollState())
-                        ) {
-                            TodoForm()
-                            TodoFilterButtons()
-                            TodoList(modifier = Modifier)
-                        }
-                    }
+                    Navigation()
+//                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//                        Column(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(innerPadding)
+//                                .padding(horizontal = 16.dp)
+//                                .verticalScroll(rememberScrollState())
+//                        ) {
+//                            TodoForm()
+//                            TodoFilterButtons()
+//                            TodoList(modifier = Modifier)
+//                        }
+//                    }
                 }
             }
         }

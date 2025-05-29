@@ -2,6 +2,7 @@ package com.shahriyardx.doto.screens.todo
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.shahriyardx.doto.LocalNavController
+import com.shahriyardx.doto.Screen
 import com.shahriyardx.doto.viewmodels.todo.LocalViewModelComposition
 import com.shahriyardx.doto.viewmodels.todo.TodoAction
 
@@ -24,6 +27,7 @@ fun TodoForm(
 ) {
     val viewModel = LocalViewModelComposition.current
     val state by viewModel.state.collectAsState()
+    val navController = LocalNavController.current
 
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(text = "Add new todo", fontSize = 25.sp, fontWeight = FontWeight.Bold)
@@ -51,13 +55,26 @@ fun TodoForm(
             shape = RoundedCornerShape(8.dp),
         )
 
-        Button(
-            shape = RoundedCornerShape(8.dp),
-            onClick = {
-                viewModel.onEvent(TodoAction.Add)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(
+                shape = RoundedCornerShape(8.dp),
+                onClick = {
+                    viewModel.onEvent(TodoAction.Add, onFinish = {
+                        navController.navigate(Screen.Todos.route)
+                    })
+                }
+            ) {
+                Text(text = "Add to database")
             }
-        ) {
-            Text(text = "Add to database")
+
+            Button(
+                shape = RoundedCornerShape(8.dp),
+                onClick = {
+                    navController.navigate(Screen.Todos.route)
+                }
+            ) {
+                Text(text = "Go Back")
+            }
         }
     }
 }

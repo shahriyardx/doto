@@ -32,7 +32,7 @@ class TodoViewModel(
         )
     }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(), TodoState())
 
-    fun onEvent(event: TodoAction) {
+    fun onEvent(event: TodoAction, onFinish: () -> Unit = {}) {
         when (event) {
             TodoAction.Add -> addTodo()
             is TodoAction.Delete -> deleteTodo(event.todo)
@@ -41,6 +41,8 @@ class TodoViewModel(
             is TodoAction.SetDescription -> setDesc(event.description)
             is TodoAction.Filter -> setFilter(event.filterType)
         }
+
+        onFinish()
     }
 
     fun setFilter(filter: TodoFilter) {
