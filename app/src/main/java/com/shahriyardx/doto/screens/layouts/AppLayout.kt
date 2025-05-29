@@ -1,6 +1,7 @@
 package com.shahriyardx.doto.screens.layouts
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,7 +41,7 @@ fun AppLayout(
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(innerPadding)
+                .padding(top = innerPadding.calculateTopPadding() + 10.dp)
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {

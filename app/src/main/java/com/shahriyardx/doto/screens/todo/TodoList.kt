@@ -1,11 +1,13 @@
 package com.shahriyardx.doto.screens.todo
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Checkbox
@@ -33,7 +35,6 @@ fun TodoList(modifier: Modifier) {
             text = "Todos",
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 10.dp)
         )
 
         Column(
@@ -43,12 +44,28 @@ fun TodoList(modifier: Modifier) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             state.todos.forEach { todo ->
-                Row(modifier = Modifier
-                    .background(Color.LightGray)
-                    .padding(10.dp)) {
+                val isDark = isSystemInDarkTheme()
+                val backgroundColor = if (isDark) Color.DarkGray else Color.LightGray
+
+                Row(
+                    modifier = Modifier
+                        .background(backgroundColor, shape = RoundedCornerShape(8.dp))
+                        .padding(10.dp)
+                ) {
+
+                    val titleColor = if (isDark) Color.White else Color.Black
+                    val descriptionColor = if (isDark) Color.LightGray else Color.DarkGray
+
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(todo.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                        Text(todo.description, color = Color.Gray)
+                        Text(
+                            todo.title,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = titleColor
+                        )
+                        Text(
+                            todo.description, color = descriptionColor
+                        )
                     }
 
                     Row {
@@ -58,7 +75,10 @@ fun TodoList(modifier: Modifier) {
                         IconButton(onClick = {
                             viewModel.onEvent(TodoAction.Delete(todo))
                         }) {
-                            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete Icon")
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete Icon"
+                            )
                         }
                     }
                 }
