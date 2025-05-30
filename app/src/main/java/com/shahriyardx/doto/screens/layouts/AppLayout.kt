@@ -1,7 +1,6 @@
 package com.shahriyardx.doto.screens.layouts
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,8 +14,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.shahriyardx.doto.AddTodoScreen
 import com.shahriyardx.doto.LocalNavController
-import com.shahriyardx.doto.Screen
 
 @Composable
 fun AppLayout(
@@ -31,7 +30,7 @@ fun AppLayout(
 
             if (showActionButton) {
                 FloatingActionButton(onClick = {
-                    navController.navigate(Screen.AddTodo.route)
+                    navController.navigate(AddTodoScreen)
                 }) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Add Todo")
                 }

@@ -1,4 +1,4 @@
-package com.shahriyardx.doto.screens.todo
+package com.shahriyardx.doto.screens.todo.add_todo
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shahriyardx.doto.LocalNavController
-import com.shahriyardx.doto.Screen
+import com.shahriyardx.doto.TodosScreen
 import com.shahriyardx.doto.viewmodels.todo.LocalViewModelComposition
 import com.shahriyardx.doto.viewmodels.todo.TodoAction
 
@@ -60,7 +60,7 @@ fun TodoForm(
                 shape = RoundedCornerShape(8.dp),
                 onClick = {
                     viewModel.onEvent(TodoAction.Add, onFinish = {
-                        navController.navigate(Screen.Todos.route)
+                        navController.navigate(TodosScreen)
                     })
                 }
             ) {
@@ -70,7 +70,7 @@ fun TodoForm(
             Button(
                 shape = RoundedCornerShape(8.dp),
                 onClick = {
-                    navController.navigate(Screen.Todos.route)
+                    navController.navigate(TodosScreen)
                 }
             ) {
                 Text(text = "Go Back")

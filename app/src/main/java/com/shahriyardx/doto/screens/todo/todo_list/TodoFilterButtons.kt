@@ -1,4 +1,4 @@
-package com.shahriyardx.doto.screens.todo
+package com.shahriyardx.doto.screens.todo.todo_list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll

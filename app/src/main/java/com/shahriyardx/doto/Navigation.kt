@@ -13,8 +13,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.shahriyardx.doto.screens.todo.AddTodoPage
-import com.shahriyardx.doto.screens.todo.TodoListPage
+import com.shahriyardx.doto.screens.todo.add_todo.AddTodoPage
+import com.shahriyardx.doto.screens.todo.todo_list.TodoListPage
 
 val LocalNavController = staticCompositionLocalOf<NavHostController> {
     error("No LocalNavController provided")
@@ -34,8 +34,8 @@ fun Navigation() {
     ) + fadeOut(animationSpec = tween(300))
 
     CompositionLocalProvider(LocalNavController provides navController) {
-        NavHost(navController = navController, startDestination = Screen.Todos.route) {
-            composable(route = Screen.Todos.route, enterTransition = {
+        NavHost(navController = navController, startDestination = TodosScreen) {
+            composable<TodosScreen>( enterTransition = {
                 enterTransition
             }, exitTransition = {
                 exitTransition
@@ -43,7 +43,7 @@ fun Navigation() {
                 TodoListPage()
             }
 
-            composable(route = Screen.AddTodo.route, enterTransition = {
+            composable<AddTodoScreen>(enterTransition = {
                 slideInHorizontally(
                     initialOffsetX = { fullWidth -> -fullWidth }, animationSpec = tween(300)
                 ) + fadeIn(animationSpec = tween(300))
