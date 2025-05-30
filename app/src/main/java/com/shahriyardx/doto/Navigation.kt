@@ -14,8 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.shahriyardx.doto.screens.todo.todo_details.DetailsPage
 import com.shahriyardx.doto.screens.todo.add_todo.AddTodoPage
+import com.shahriyardx.doto.screens.todo.todo_details.DetailsPage
 import com.shahriyardx.doto.screens.todo.todo_list.TodoListPage
 
 val LocalNavController = staticCompositionLocalOf<NavHostController> {
@@ -51,7 +51,10 @@ fun Navigation() {
                 AddTodoPage()
             }
 
-            composable<DetailsScreen>() {
+            composable<DetailsScreen>(
+                enterTransition = { enterTransition },
+                exitTransition = { exitTransition }
+            ) {
                 val args = it.toRoute<DetailsScreen>()
                 DetailsPage(args.id)
             }
