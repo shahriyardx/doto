@@ -2,6 +2,7 @@ package com.shahriyardx.doto.di
 
 import androidx.room.Room
 import com.shahriyardx.doto.database.Database
+import com.shahriyardx.doto.database.migrations.todoCategoryMigration
 import com.shahriyardx.doto.repositories.TodoRepository
 import com.shahriyardx.doto.repositories.TodoRepositoryImpl
 import com.shahriyardx.doto.viewmodels.todo.TodoViewModel
@@ -12,10 +13,8 @@ import org.koin.dsl.module
 val appModule = module {
     single {
         Room.databaseBuilder(
-            androidContext(),
-            Database::class.java,
-            "database.db"
-        ).build()
+            androidContext(), Database::class.java, "database.db"
+        ).addMigrations(todoCategoryMigration).build()
     }
 
 //    single {

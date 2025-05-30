@@ -8,7 +8,7 @@ data class TodoEntity(
     val title: String,
     val description: String,
     val isComplete: Boolean = false,
-    val isArchived: Boolean = false,
+    val category: String = "Uncategorized",
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) {
     override fun toString(): String {

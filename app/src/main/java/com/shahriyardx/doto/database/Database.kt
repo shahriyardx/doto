@@ -7,7 +7,7 @@ import com.shahriyardx.doto.database.todo.TodoEntity
 
 @Database(
     entities = [TodoEntity::class],
-    version = 1,
+    version = 2,
 )
 abstract class Database: RoomDatabase() {
     abstract val dao: TodoDao
