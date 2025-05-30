@@ -6,6 +6,7 @@ import com.shahriyardx.doto.database.migrations.todoCategoryMigration
 import com.shahriyardx.doto.repositories.TodoRepository
 import com.shahriyardx.doto.repositories.TodoRepositoryImpl
 import com.shahriyardx.doto.viewmodels.todo.TodoViewModel
+import com.shahriyardx.doto.viewmodels.todo_details.TodoDetailsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -27,6 +28,10 @@ val appModule = module {
 
     viewModel {
         TodoViewModel(get())
+    }
+
+    viewModel { (todoId: Int) ->
+        TodoDetailsViewModel(todoId, get())
     }
 }
 

@@ -25,13 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shahriyardx.doto.DetailsScreen
 import com.shahriyardx.doto.LocalNavController
-import com.shahriyardx.doto.viewmodels.todo.LocalViewModelComposition
 import com.shahriyardx.doto.viewmodels.todo.TodoAction
+import com.shahriyardx.doto.viewmodels.todo.TodoViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TodoList(modifier: Modifier) {
     val navController = LocalNavController.current
-    val viewModel = LocalViewModelComposition.current
+    val viewModel = koinViewModel<TodoViewModel>()
     val state by viewModel.state.collectAsState()
 
     Column(modifier = modifier) {

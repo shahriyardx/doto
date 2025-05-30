@@ -18,14 +18,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shahriyardx.doto.LocalNavController
 import com.shahriyardx.doto.TodosScreen
-import com.shahriyardx.doto.viewmodels.todo.LocalViewModelComposition
 import com.shahriyardx.doto.viewmodels.todo.TodoAction
+import com.shahriyardx.doto.viewmodels.todo.TodoViewModel
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun TodoForm(
 ) {
-    val viewModel = LocalViewModelComposition.current
+    val viewModel = koinViewModel<TodoViewModel>()
     val state by viewModel.state.collectAsState()
     val navController = LocalNavController.current
 

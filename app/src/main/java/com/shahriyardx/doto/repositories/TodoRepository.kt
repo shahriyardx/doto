@@ -12,4 +12,5 @@ interface TodoRepository {
     suspend fun addTodo(todo: TodoEntity): Long
     suspend fun updateTodo(todo: TodoEntity)
     suspend fun deleteTodo(todo: TodoEntity)
+    fun getTodoById(id: Int): Flow<TodoEntity?>
 }

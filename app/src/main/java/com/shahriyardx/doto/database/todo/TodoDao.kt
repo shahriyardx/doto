@@ -26,4 +26,7 @@ interface TodoDao {
 
     @Query("SELECT * FROM TodoEntity WHERE isComplete = 0")
     fun getIncompleteTodos(): Flow<List<TodoEntity>>
+
+    @Query("SELECT * FROM TodoEntity WHERE id = :id")
+    fun getTodoById(id: Int): Flow<TodoEntity?>
 }

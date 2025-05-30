@@ -27,4 +27,8 @@ class TodoRepositoryImpl(override val database: Database): TodoRepository {
     override suspend fun deleteTodo(todo: TodoEntity) {
         dao.delete(todo)
     }
+
+    override fun getTodoById(id: Int): Flow<TodoEntity?> {
+        return dao.getTodoById(id)
+    }
 }

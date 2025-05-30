@@ -11,13 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.shahriyardx.doto.viewmodels.todo.LocalViewModelComposition
 import com.shahriyardx.doto.viewmodels.todo.TodoAction
 import com.shahriyardx.doto.viewmodels.todo.TodoFilter
+import com.shahriyardx.doto.viewmodels.todo.TodoViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun TodoFilterButtons() {
-    val viewModel = LocalViewModelComposition.current
+    val viewModel = koinViewModel<TodoViewModel>()
     val state = viewModel.state.collectAsState()
 
     Row(
