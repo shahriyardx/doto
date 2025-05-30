@@ -1,6 +1,7 @@
 package com.shahriyardx.doto.screens.todo.todo_list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,11 +23,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.shahriyardx.doto.DetailsScreen
+import com.shahriyardx.doto.LocalNavController
 import com.shahriyardx.doto.viewmodels.todo.LocalViewModelComposition
 import com.shahriyardx.doto.viewmodels.todo.TodoAction
 
 @Composable
 fun TodoList(modifier: Modifier) {
+    val navController = LocalNavController.current
     val viewModel = LocalViewModelComposition.current
     val state by viewModel.state.collectAsState()
 
@@ -51,6 +55,9 @@ fun TodoList(modifier: Modifier) {
                     modifier = Modifier
                         .background(backgroundColor, shape = RoundedCornerShape(8.dp))
                         .padding(10.dp)
+                        .clickable(onClick = {
+                            navController.navigate(DetailsScreen(todo.id))
+                        })
                 ) {
 
                     val titleColor = if (isDark) Color.White else Color.Black

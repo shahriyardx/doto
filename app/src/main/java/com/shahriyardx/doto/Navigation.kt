@@ -13,6 +13,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.shahriyardx.doto.screens.todo.todo_details.DetailsPage
 import com.shahriyardx.doto.screens.todo.add_todo.AddTodoPage
 import com.shahriyardx.doto.screens.todo.todo_list.TodoListPage
 
@@ -35,24 +37,23 @@ fun Navigation() {
 
     CompositionLocalProvider(LocalNavController provides navController) {
         NavHost(navController = navController, startDestination = TodosScreen) {
-            composable<TodosScreen>( enterTransition = {
-                enterTransition
-            }, exitTransition = {
-                exitTransition
-            }) {
+            composable<TodosScreen>(
+                enterTransition = { enterTransition },
+                exitTransition = { exitTransition }
+            ) {
                 TodoListPage()
             }
 
-            composable<AddTodoScreen>(enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth }, animationSpec = tween(300)
-                ) + fadeIn(animationSpec = tween(300))
-            }, exitTransition = {
-                slideOutHorizontally(
-                    animationSpec = tween(300)
-                ) + fadeOut(animationSpec = tween(300))
-            }) {
+            composable<AddTodoScreen>(
+                enterTransition = { enterTransition },
+                exitTransition = { exitTransition }
+            ) {
                 AddTodoPage()
+            }
+
+            composable<DetailsScreen>() {
+                val args = it.toRoute<DetailsScreen>()
+                DetailsPage(args.id)
             }
         }
     }
