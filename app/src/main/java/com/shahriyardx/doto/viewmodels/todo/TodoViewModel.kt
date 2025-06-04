@@ -24,7 +24,6 @@ class TodoViewModel(
     }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(), emptyList())
 
     private val _state = MutableStateFlow(TodoState())
-
     val state = combine(_state, _todoFilter, _todos) { state, todoFilter, todos ->
         state.copy(
             todos = todos,
@@ -80,8 +79,6 @@ class TodoViewModel(
                 )
             }
         }
-
-
     }
 
     fun toggleCompletion(todo: TodoEntity) {
@@ -93,8 +90,7 @@ class TodoViewModel(
             it.copy(
                 todos = it.todos.map { it ->
                     if (todo.id == it.id) it.copy(isComplete = !it.isComplete) else it
-                }
-            )
+                })
         }
     }
 
@@ -107,8 +103,7 @@ class TodoViewModel(
             it.copy(
                 todos = it.todos.filter { it ->
                     it.id != todo.id
-                }
-            )
+                })
         }
     }
 }
