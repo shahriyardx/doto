@@ -31,8 +31,10 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun DetailsPage(id: Int) {
-    val viewModel: TodoDetailsViewModel = koinViewModel<TodoDetailsViewModel>(
-        parameters = { parametersOf(id) })
+    val viewModel: TodoDetailsViewModel = koinViewModel {
+        parametersOf(id)
+    }
+
     val todo by viewModel.todo.collectAsState()
     val navController = LocalNavController.current
 
