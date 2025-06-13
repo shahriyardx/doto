@@ -6,6 +6,6 @@ import com.shahriyardx.doto.screens.layouts.AppLayout
 @Composable
 fun AddTodoPage() {
     AppLayout {
-        TodoForm()
+        TodoFormInputs()
     }
 }

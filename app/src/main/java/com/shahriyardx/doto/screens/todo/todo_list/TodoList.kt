@@ -25,7 +25,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -45,7 +44,7 @@ fun TodoList(modifier: Modifier) {
     val state by viewModel.state.collectAsState()
 
     val sheetState = rememberModalBottomSheetState()
-    var showBottomSheet by remember {
+    val showBottomSheet = remember {
         mutableStateOf(false)
     }
 
@@ -66,9 +65,9 @@ fun TodoList(modifier: Modifier) {
                 val isDark = isSystemInDarkTheme()
                 val backgroundColor = if (isDark) Color.DarkGray else Color.LightGray
 
-                if (showBottomSheet) {
+                if (showBottomSheet.value) {
                     ModalBottomSheet(
-                        onDismissRequest = { showBottomSheet = false },
+                        onDismissRequest = { showBottomSheet.value = false },
                         sheetState = sheetState
                     ) {
                         Column(
@@ -86,12 +85,14 @@ fun TodoList(modifier: Modifier) {
                             ) {
                                 Button(onClick = {
                                     viewModel.onEvent(TodoAction.Completed(todo))
+                                    showBottomSheet.value = false
                                 }, modifier = Modifier.weight(1f)) {
                                     Text(text = "Mark as ${if (todo.isComplete) "incomplete" else "complete"}")
                                 }
                                 Button(
                                     onClick = {
                                         viewModel.onEvent(TodoAction.Delete(todo))
+                                        showBottomSheet.value = false
                                     },
                                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error),
                                     modifier = Modifier.weight(1f)
@@ -110,7 +111,7 @@ fun TodoList(modifier: Modifier) {
                         )
                         .padding(10.dp)
                         .clickable(onClick = {
-                            showBottomSheet = true
+                            showBottomSheet.value = true
                         })
                 ) {
                     val titleColor = if (isDark) Color.White else Color.Black

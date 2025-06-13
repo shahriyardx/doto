@@ -2,37 +2,27 @@ package com.shahriyardx.doto.screens.todo.add_todo
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.shahriyardx.doto.LocalNavController
-import com.shahriyardx.doto.TodosScreen
 import com.shahriyardx.doto.viewmodels.todo.TodoAction
 import com.shahriyardx.doto.viewmodels.todo.TodoViewModel
 import org.koin.androidx.compose.koinViewModel
 
-
 @Composable
-fun TodoForm(
+fun TodoFormInputs(
 ) {
     val viewModel = koinViewModel<TodoViewModel>()
     val state by viewModel.state.collectAsState()
-    val navController = LocalNavController.current
 
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(text = "Add new todo", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = state.title,
@@ -55,27 +45,5 @@ fun TodoForm(
             },
             shape = RoundedCornerShape(8.dp),
         )
-
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(
-                shape = RoundedCornerShape(8.dp),
-                onClick = {
-                    viewModel.onEvent(TodoAction.Add, onFinish = {
-                        navController.navigate(TodosScreen)
-                    })
-                }
-            ) {
-                Text(text = "Add to database")
-            }
-
-            Button(
-                shape = RoundedCornerShape(8.dp),
-                onClick = {
-                    navController.navigate(TodosScreen)
-                }
-            ) {
-                Text(text = "Go Back")
-            }
-        }
     }
 }
