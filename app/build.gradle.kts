@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.shahriyardx.doto"
-        minSdk = 31
+        minSdk = 26
         targetSdk = 36
         versionCode = 3
         versionName = "3.0"

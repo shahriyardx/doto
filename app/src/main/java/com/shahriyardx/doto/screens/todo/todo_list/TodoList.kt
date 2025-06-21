@@ -6,11 +6,15 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,9 +48,7 @@ fun TodoList(modifier: Modifier) {
     val state by viewModel.state.collectAsState()
 
     val sheetState = rememberModalBottomSheetState()
-    val showBottomSheet = remember {
-        mutableStateOf(false)
-    }
+
 
     Column(modifier = modifier) {
         Text(
@@ -64,6 +66,9 @@ fun TodoList(modifier: Modifier) {
             state.todos.forEach { todo ->
                 val isDark = isSystemInDarkTheme()
                 val backgroundColor = if (isDark) Color.DarkGray else Color.LightGray
+                val showBottomSheet = remember {
+                    mutableStateOf(false)
+                }
 
                 if (showBottomSheet.value) {
                     ModalBottomSheet(
@@ -104,40 +109,71 @@ fun TodoList(modifier: Modifier) {
                     }
                 }
 
-                Row(
-                    modifier = Modifier
-                        .background(
-                            backgroundColor, shape = RoundedCornerShape(8.dp)
+                SwipeableTodoWithAction(
+                    modifier = Modifier.fillMaxWidth(),
+                    actions = {
+                        ActionIcon(
+                            modifier = Modifier.fillMaxHeight().background(Color.Red),
+                            icon = Icons.Default.Delete,
+                            tint = Color.White,
+                            onClick = {
+                                viewModel.onEvent(TodoAction.Delete(todo))
+                            }
                         )
-                        .padding(10.dp)
-                        .clickable(onClick = {
-                            showBottomSheet.value = true
-                        })
-                ) {
-                    val titleColor = if (isDark) Color.White else Color.Black
-                    val descriptionColor = if (isDark) Color.LightGray else Color.DarkGray
 
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            todo.title,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = titleColor
+                        ActionIcon(
+                            modifier = Modifier.fillMaxHeight().background(Color.Blue),
+                            icon = Icons.Default.Check,
+                            tint = Color.White,
+                            onClick = {
+                                viewModel.onEvent(TodoAction.Completed(todo))
+                            }
                         )
-                        Text(
-                            todo.description, color = descriptionColor
-                        )
+                    },
+                    isRevealed = false,
+                    onExpanded = {
+
+                    },
+                    onCollapsed = {
+
                     }
-
-                    Row {
-
-                        IconButton(onClick = {
-                            navController.navigate(DetailsScreen(todo.id))
-                        }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                contentDescription = "Delete Icon"
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .background(
+                                backgroundColor, shape = RoundedCornerShape(8.dp)
                             )
+                            .clickable(onClick = {
+                                showBottomSheet.value = true
+                            })
+                            .padding(10.dp)
+
+                    ) {
+                        val titleColor = if (isDark) Color.White else Color.Black
+                        val descriptionColor = if (isDark) Color.LightGray else Color.DarkGray
+
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                todo.title,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = titleColor
+                            )
+                            Text(
+                                todo.description, color = descriptionColor
+                            )
+                        }
+
+                        Row {
+
+                            IconButton(onClick = {
+                                navController.navigate(DetailsScreen(todo.id))
+                            }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                    contentDescription = "Delete Icon"
+                                )
+                            }
                         }
                     }
                 }
