@@ -102,7 +102,7 @@ fun SwipeableTodoWithAction(
                         .fillMaxWidth()
                         .fillMaxHeight()
                         .weight(1f)
-                        .background(Color.Yellow),
+                        .background(Color.Red),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
