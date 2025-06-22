@@ -1,183 +1,114 @@
 package com.shahriyardx.doto.screens.todo.todo_list
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.shahriyardx.doto.DetailsScreen
-import com.shahriyardx.doto.LocalNavController
-import com.shahriyardx.doto.viewmodels.todo.TodoAction
+import com.shahriyardx.doto.viewmodels.todo.TodoFilter
 import com.shahriyardx.doto.viewmodels.todo.TodoViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoList(modifier: Modifier) {
-    val navController = LocalNavController.current
     val viewModel = koinViewModel<TodoViewModel>()
-    val state by viewModel.state.collectAsState()
-
-    val sheetState = rememberModalBottomSheetState()
-
-
-    Column(modifier = modifier) {
-        Text(
-            text = "Todos",
-            fontSize = 25.sp,
-            fontWeight = FontWeight.Bold,
+    val tabItems = listOf(
+        TabItem(
+            "All",
+            Icons.AutoMirrored.Filled.List,
+            selectedIcon = Icons.AutoMirrored.Filled.List,
+            filterType = TodoFilter.ALL
+        ), TabItem(
+            "Incomplete",
+            Icons.Default.Refresh,
+            selectedIcon = Icons.Default.Refresh,
+            filterType = TodoFilter.INCOMPLETE
+        ), TabItem(
+            "Complete",
+            Icons.Default.Check,
+            selectedIcon = Icons.Default.Check,
+            filterType = TodoFilter.COMPLETED
         )
+    )
 
+    var selectedIndex by remember { mutableStateOf(0) }
+    val pagerState = rememberPagerState {
+        tabItems.size
+    }
+
+    LaunchedEffect(selectedIndex) {
+        pagerState.animateScrollToPage(selectedIndex)
+    }
+
+    LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
+        if (!pagerState.isScrollInProgress) {
+            selectedIndex = pagerState.currentPage
+        }
+    }
+
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    viewModel.openDialog()
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Todo")
+            }
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 5.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(innerPadding)
         ) {
-            state.todos.forEach { todo ->
-                val isDark = isSystemInDarkTheme()
-                val backgroundColor = if (isDark) Color.DarkGray else Color.LightGray
-                val showBottomSheet = remember {
-                    mutableStateOf(false)
+            TabRow(selectedTabIndex = selectedIndex) {
+                tabItems.forEachIndexed { index, item ->
+                    Tab(
+                        selected = selectedIndex == index,
+                        onClick = { selectedIndex = index },
+                        text = { Text(item.title) },
+                        icon = {
+                            Icon(
+                                imageVector = if (index == selectedIndex) item.selectedIcon else item.unselectedIcon,
+                                contentDescription = item.title
+                            )
+                        })
                 }
+            }
 
-                if (showBottomSheet.value) {
-                    ModalBottomSheet(
-                        onDismissRequest = { showBottomSheet.value = false },
-                        sheetState = sheetState
-                    ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(10.dp),
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text(
-                                text = "Todo Action",
-                                fontSize = 25.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                Button(onClick = {
-                                    viewModel.onEvent(TodoAction.Completed(todo))
-                                    showBottomSheet.value = false
-                                }, modifier = Modifier.weight(1f)) {
-                                    Text(text = "Mark as ${if (todo.isComplete) "incomplete" else "complete"}")
-                                }
-                                Button(
-                                    onClick = {
-                                        viewModel.onEvent(TodoAction.Delete(todo))
-                                        showBottomSheet.value = false
-                                    },
-                                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error),
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Text(text = "Delete")
-                                }
-                            }
-                        }
-                    }
-                }
-
-                SwipeableTodoWithAction(
-                    modifier = Modifier.fillMaxWidth(),
-                    actions = {
-                        ActionIcon(
-                            modifier = Modifier.fillMaxHeight().background(Color.Red),
-                            icon = Icons.Default.Delete,
-                            tint = Color.White,
-                            onClick = {
-                                viewModel.onEvent(TodoAction.Delete(todo))
-                            }
-                        )
-
-                        ActionIcon(
-                            modifier = Modifier.fillMaxHeight().background(Color.Blue),
-                            icon = Icons.Default.Check,
-                            tint = Color.White,
-                            onClick = {
-                                viewModel.onEvent(TodoAction.Completed(todo))
-                            }
-                        )
-                    },
-                    isRevealed = false,
-                    onExpanded = {
-
-                    },
-                    onCollapsed = {
-
-                    }
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .background(
-                                backgroundColor, shape = RoundedCornerShape(8.dp)
-                            )
-                            .clickable(onClick = {
-                                showBottomSheet.value = true
-                            })
-                            .padding(10.dp)
-
-                    ) {
-                        val titleColor = if (isDark) Color.White else Color.Black
-                        val descriptionColor = if (isDark) Color.LightGray else Color.DarkGray
-
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                todo.title,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = titleColor
-                            )
-                            Text(
-                                todo.description, color = descriptionColor
-                            )
-                        }
-
-                        Row {
-
-                            IconButton(onClick = {
-                                navController.navigate(DetailsScreen(todo.id))
-                            }) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                    contentDescription = "Delete Icon"
-                                )
-                            }
-                        }
-                    }
-                }
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) { index ->
+                TodoByFilter(tabItems[index].filterType)
             }
         }
     }
+
+    TodoAddDialog(viewModel)
+
 }
