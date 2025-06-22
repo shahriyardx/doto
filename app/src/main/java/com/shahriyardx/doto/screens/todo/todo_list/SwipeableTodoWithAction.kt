@@ -3,6 +3,8 @@ package com.shahriyardx.doto.screens.todo.todo_list
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
@@ -34,6 +37,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -102,8 +106,16 @@ fun SwipeableTodoWithAction(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    val iconSize by animateDpAsState(
+                        targetValue = if (offset.value < -35) 24.dp else 0.dp,
+                        animationSpec = tween(durationMillis = 300)
+                    )
                     IconButton(onClick = {}) {
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+                        Icon(
+                            modifier = Modifier.size(iconSize),
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = null
+                        )
                     }
                 }
             }
