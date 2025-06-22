@@ -3,6 +3,7 @@ package com.shahriyardx.doto.screens.todo.todo_list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -26,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -57,17 +59,16 @@ fun TodoByFilter(filter: TodoFilter) {
 
     val isDark = isSystemInDarkTheme()
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(todos) { todo ->
-            val showBottomSheet = remember {
-                mutableStateOf(false)
-            }
+    when {
+        todos.isNotEmpty() -> LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(todos) { todo ->
+                val showBottomSheet = remember {
+                    mutableStateOf(false)
+                }
 
-            SwipeableTodoWithAction(
-                modifier = Modifier.fillMaxWidth(),
-                actions = {
+                SwipeableTodoWithAction(modifier = Modifier.fillMaxWidth(), actions = {
                     ActionIcon(
                         modifier = Modifier
                             .fillMaxHeight()
@@ -87,56 +88,60 @@ fun TodoByFilter(filter: TodoFilter) {
                         onClick = {
                             viewModel.onEvent(TodoAction.Completed(todo))
                         })
-                },
-                isRevealed = false,
-                onDelete = {
+                }, isRevealed = false, onDelete = {
                     viewModel.onEvent(TodoAction.Delete(todo))
-                }
-            ) {
-                Row(
-                    modifier = Modifier
-                        .clickable(onClick = {
-                            showBottomSheet.value = true
-                        })
-                        .padding(10.dp)
+                }) {
+                    Row(
+                        modifier = Modifier
+                            .clickable(onClick = {
+                                showBottomSheet.value = true
+                            })
+                            .padding(10.dp)
 
-                ) {
-                    val titleColor = if (isDark) Color.White else Color.Black
-                    val descriptionColor = if (isDark) Color.LightGray else Color.DarkGray
+                    ) {
+                        val titleColor = if (isDark) Color.White else Color.Black
+                        val descriptionColor = if (isDark) Color.LightGray else Color.DarkGray
 
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            todo.title,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = titleColor
-                        )
-                        Text(
-                            todo.description, color = descriptionColor
-                        )
-                    }
-
-                    Row {
-
-                        IconButton(onClick = {
-                            navController.navigate(DetailsScreen(todo.id))
-                        }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                contentDescription = "Delete Icon"
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                todo.title,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = titleColor
                             )
+                            Text(
+                                todo.description, color = descriptionColor
+                            )
+                        }
+
+                        Row {
+
+                            IconButton(onClick = {
+                                navController.navigate(DetailsScreen(todo.id))
+                            }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                    contentDescription = "Delete Icon"
+                                )
+                            }
                         }
                     }
                 }
-            }
 
-            if (showBottomSheet.value) {
-                ModalBottomSheet(
-                    onDismissRequest = { showBottomSheet.value = false }, sheetState = sheetState
-                ) {
-                    // Update Form
+                if (showBottomSheet.value) {
+                    ModalBottomSheet(
+                        onDismissRequest = { showBottomSheet.value = false },
+                        sheetState = sheetState
+                    ) {
+                        // Update Form
+                    }
                 }
             }
         }
+
+        else -> Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            Text("Nothing to show")
+        }
     }
+
 }
