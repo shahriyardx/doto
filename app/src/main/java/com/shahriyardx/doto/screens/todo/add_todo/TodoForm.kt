@@ -17,8 +17,7 @@ import com.shahriyardx.doto.viewmodels.todo.TodoViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun TodoFormInputs(
-) {
+fun TodoFormInputs() {
     val viewModel = koinViewModel<TodoViewModel>()
     val state by viewModel.state.collectAsState()
 

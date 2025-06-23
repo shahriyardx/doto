@@ -1,6 +1,5 @@
 package com.shahriyardx.doto.screens.todo.todo_list
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateDpAsState
@@ -84,14 +83,12 @@ fun SwipeableTodoWithAction(
                 .height(IntrinsicSize.Min)
                 .onSizeChanged {
                     containerWidth = it.width.toFloat()
-                }
-        ) {
+                }) {
             Row {
                 Row(
-                    modifier = Modifier
-                        .onSizeChanged {
-                            contextMenuWidth = it.width.toFloat()
-                        },
+                    modifier = Modifier.onSizeChanged {
+                        contextMenuWidth = it.width.toFloat()
+                    },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     actions()
@@ -128,43 +125,45 @@ fun SwipeableTodoWithAction(
                         IntOffset(offset.value.roundToInt(), 0)
                     }
                     .pointerInput(true) {
-                        detectHorizontalDragGestures(
-                            onHorizontalDrag = { _, dragAmount ->
-                                scope.launch {
-                                    var newOffset = offset.value + dragAmount
-                                    if (newOffset > 0) {
-                                        newOffset = newOffset.coerceIn(0f, contextMenuWidth)
-                                    } else {
-                                        newOffset = newOffset.coerceIn(-containerWidth + contextMenuWidth, 0f)
-                                    }
-                                    offset.snapTo(newOffset)
-                                }
-                            },
-                            onDragEnd = {
-                                when {
-                                    offset.value >= contextMenuWidth / 2f -> {
-                                        scope.launch {
-                                            offset.animateTo(contextMenuWidth)
-                                            onExpanded?.invoke()
-                                        }
-                                    }
+                        detectHorizontalDragGestures(onHorizontalDrag = { _, dragAmount ->
+                            scope.launch {
+                                var newOffset = offset.value + dragAmount
 
-                                    offset.value <= -containerWidth / 2 -> {
+                                newOffset = if (newOffset > 0) {
+                                    newOffset.coerceIn(0f, contextMenuWidth)
+                                } else {
+                                    newOffset.coerceIn(
+                                        -containerWidth + contextMenuWidth, 0f
+                                    )
+                                }
+                                offset.snapTo(newOffset)
+                            }
+                        }, onDragEnd = {
+                            when {
+                                offset.value >= contextMenuWidth / 2f -> {
+                                    scope.launch {
+                                        offset.animateTo(contextMenuWidth)
+                                        onExpanded?.invoke()
+                                    }
+                                }
+
+                                offset.value <= -containerWidth / 2 -> {
+                                    scope.launch {
+                                        offset.animateTo(-contextMenuWidth)
                                         removed = true
                                         onDelete()
                                     }
+                                }
 
-                                    else -> {
-                                        scope.launch {
-                                            offset.animateTo(0f)
-                                            onCollapsed?.invoke()
-                                        }
+                                else -> {
+                                    scope.launch {
+                                        offset.animateTo(0f)
+                                        onCollapsed?.invoke()
                                     }
                                 }
                             }
-                        )
-                    }
-            ) {
+                        })
+                    }) {
                 content()
             }
         }
