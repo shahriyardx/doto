@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    id("com.google.devtools.ksp") version "2.1.21-2.0.1" apply true
+    id("com.google.devtools.ksp") version "2.2.0-2.0.2" apply true
 }
 
 android {
